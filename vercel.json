@@ -1,23 +1,13 @@
 {
-  "version": 2,
+  "name": "my-vercel-project",
   "builds": [
     {
-      "src": "public/index.html",
-      "use": "@vercel/static"
+      "src": "server.js",
+      "use": "@vercel/node"
     }
   ],
-  "rewrites": [
-    {
-      "source": "/get_answer",
-      "destination": "/index.js"
-    },
-    {
-      "source": "/api/.*",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.js"
-    }
+  "routes": [
+    { "src": "/api/*", "dest": "server.js" },
+    { "src": "/(.*)", "dest": "public/$1" }
   ]
 }
