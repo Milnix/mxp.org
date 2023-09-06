@@ -6,20 +6,14 @@
       "use": "@vercel/node"
     }
   ],
-  "routes": [
-    {
-      "src": "/get_answer",
-      "dest": "/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.js"
-    }
-  ],
   "rewrites": [
     {
+      "source": "/get_answer",
+      "destination": "/index.js"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/"
+      "destination": "/index.js"
     }
   ]
 }
