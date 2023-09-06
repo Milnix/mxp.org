@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MXP</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            background-color: black;
+            color: white;
+            text-align: center; /* Center-align the entire body */
+        }
+        .form-container {
+            text-align: left; /* Left-align the form elements */
+            display: inline-block; /* Display as inline-block to center-align */
+            padding: 20px;
+            vertical-align: middle; /* Vertically center-align within the main content */
+        }
+        #problemInput {
+            height: 100px;
+            resize: none;
+            display: block; /* Display as a block element for margin to work */
+            margin: 0 auto; /* Center-align the text area */
+        }
+        #getAnswerBtn {
+            background-color: #005ec3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: -10px; /* Add margin at the top to separate from the text area */
+        }
+        .small-text {
+            font-size: 15px; /* Set the font size to make it small */
+            margin-top: -20px; /* Add margin to the top of the paragraph */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MILNIXPLORIUM</h1>
+        <p class="small-text">Please ensure that you add a '?' at the end of your question to ensure accuracy. Thank you.</p>
+    </header>
+    <main>
+        <div class="form-container">
+            <form id="uploadForm">
+                <label for="problemInput">Type your problem here:</label>
+                <textarea id="problemInput" rows="4" cols="50" placeholder="Type your problem here"></textarea>
+                <br>
+                <button type="button" id="getAnswerBtn">Get Answer</button>
+            </form>
+        </div>
+
+        <div id="aiResponse" style="display: none; text-align: left; padding: 20px;">
+            <!-- AI response content will appear here -->
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('getAnswerBtn').addEventListener('click', async function () {
+            const userQuestion = document.getElementById('problemInput').value.trim();
+
+            if (userQuestion === '') {
+                alert("Please enter a question.");
+            } else {
+                try {
+                    const aiResponse = await getCURLResponse(userQuestion);
+                    const aiResponseElement = document.getElementById('aiResponse');
+
+                    // Replace "AI Response:" with "Milnix jr:"
+                    aiResponseElement.innerHTML = `<p><strong>Milnix jr:</strong> ${aiResponse}</p>`;
+                    aiResponseElement.style.display = 'block';
+                } catch (error) {
+                    console.error('Error fetching AI response:', error);
+                    alert('An error occurred while fetching the AI response.');
+                }
+            }
+        });
+
+        async function getCURLResponse(userQuestion) {
+            try {
+                const response = await fetch('http://localhost:3000/get_answer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userQuestion: userQuestion,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch AI response: ${response.status} ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data.aiResponse;
+            } catch (error) {
+                console.error('Error fetching AI response:', error);
+                throw error;
+            }
+        }
+    </script>
+</body>
+</html>
