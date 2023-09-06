@@ -8,3 +8,4 @@ npm-debug.log
 # Other generated files and directories
 build/
 dist/
+.vercel
